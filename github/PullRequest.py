@@ -548,16 +548,21 @@ class PullRequest(github.GithubObject.CompletableGithubObject):
         )
         return status == 204
 
-    def merge(self, commit_message=github.GithubObject.NotSet):
+    def merge(self, commit_message=github.GithubObject.NotSet, merge_method=github.GithubObject.NotSet):
         """
         :calls: `PUT /repos/:owner/:repo/pulls/:number/merge <http://developer.github.com/v3/pulls>`_
         :param commit_message: string
+        :param merge_method: string
         :rtype: :class:`github.PullRequestMergeStatus.PullRequestMergeStatus`
         """
         assert commit_message is github.GithubObject.NotSet or isinstance(commit_message, (str, unicode)), commit_message
+        assert merge_method is github.GithubObject.NotSet or isinstance(merge_method, (str, unicode)), merge_method
         post_parameters = dict()
         if commit_message is not github.GithubObject.NotSet:
             post_parameters["commit_message"] = commit_message
+        if merge_method is not github.GithubObject.NotSet:
+            if merge_method == 'squash' or merge_method == 'rebase':
+                post_parameters["merge_method"] = merge_method
         headers, data = self._requester.requestJsonAndCheck(
             "PUT",
             self.url + "/merge",
