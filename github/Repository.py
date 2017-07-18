@@ -1000,13 +1000,13 @@ class Repository(github.GithubObject.CompletableGithubObject):
         assert isinstance(body, (str, unicode)), body
         assert isinstance(base, (str, unicode)), base
         assert isinstance(head, (str, unicode)), head
-        return self.__create_pull(title=title, body=body, base=base, head=head)
+        return self.__create_pull(title=title, body=body, base=base, head=head, maintainer_can_modify=False)
 
     def __create_pull_2(self, issue, base, head):
         assert isinstance(issue, github.Issue.Issue), issue
         assert isinstance(base, (str, unicode)), base
         assert isinstance(head, (str, unicode)), head
-        return self.__create_pull(issue=issue._identity, base=base, head=head)
+        return self.__create_pull(issue=issue._identity, base=base, head=head, maintainer_can_modify=False)
 
     def __create_pull(self, **kwds):
         post_parameters = kwds
